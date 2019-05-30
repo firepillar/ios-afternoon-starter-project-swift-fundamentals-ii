@@ -16,8 +16,53 @@ import UIKit
 //: e. Use a `String?` for the Terminal, since it may not be set yet (i.e.: waiting to arrive on time)
 //:
 //: f. Use a class to represent a `DepartureBoard` with a list of departure flights, and the current airport
+enum FlightStatus {
+    case EnRoute
+    case Scheduled
+    case Canceled
+    case Delayed
+    case Landed
+}
 
+struct Airport {
+    var destination: Bool
+    var arrival: Bool
+    
+}
 
+struct Flight {
+    var departureTime: Date?
+    var terminal: String?
+    var flightStatus: FlightStatus
+    var destination: String
+}
+
+class DepartureBoard {
+    var departingFlights: [Flight]
+    var currentAirport: Airport
+    
+    init(currentAirport: Airport) {
+        departingFlights = []
+        self.currentAirport = currentAirport
+    }
+    
+    func alertPassengers() {
+        
+        for flight in departingFlights {
+            
+            switch flight.flightStatus {
+                case FlightStatus.Canceled :
+                    print("We're sorry your flight to \(flight.destination) was canceled, here is a $500 voucher")
+                case FlightStatus.Delayed :
+                    print("We're sorry our flight to \(flight.destination) has been delayed. Please see a gate agent for more details.")
+                default:
+                    break
+            
+            
+            }
+        }
+    }
+}
 
 //: ## 2. Create 3 flights and add them to a departure board
 //: a. For the departure time, use `Date()` for the current time
@@ -29,7 +74,18 @@ import UIKit
 //: d. Make one of the flights have a `nil` terminal because it has not been decided yet.
 //:
 //: e. Stretch: Look at the API for [`DateComponents`](https://developer.apple.com/documentation/foundation/datecomponents?language=objc) for creating a specific time
+//List of Departing Flights
+var charlotte = Flight(departureTime: Date(), terminal: "Delta Terminal", flightStatus: .EnRoute, destination: "Charlotte")
+var lasVegas = Flight(departureTime: Date(), terminal: nil, flightStatus: .Canceled, destination: "Las Vegas")
+var jacksonville = Flight(departureTime: Date(), terminal: "American Airlines", flightStatus: .Landed, destination: "Jacksonville")
+var jFK = Airport(destination: false, arrival: true)
 
+//Departure Board
+var departureBoard = DepartureBoard(currentAirport: jFK)
+
+departureBoard.departingFlights.append(contentsOf: [charlotte, lasVegas, jacksonville])
+print("Departures for the day: \(departureBoard.departingFlights)")
+    
 
 
 //: ## 3. Create a free-standing function that can print the flight information from the `DepartureBoard`
@@ -40,7 +96,13 @@ import UIKit
 //: c. Make your `FlightStatus` enum conform to `String` so you can print the `rawValue` String values from the `enum`. See the [enum documentation](https://docs.swift.org/swift-book/LanguageGuide/Enumerations.html).
 //:
 //: d. Print out the current DepartureBoard you created using the function
-
+func printDepartures(departureBoard: DepartureBoard) {
+    for flights in departureBoard.departingFlights {
+            print(flights)
+        }
+    
+}
+printDepartures(departureBoard: departureBoard)
 
 
 
@@ -60,7 +122,14 @@ import UIKit
 //:     Destination: Boston Airline: KLM Flight: KL 6966 Departure Time: 1:26 PM Terminal: 4 Status: Scheduled
 
 
-
+func printDepartures2(departureBoard: DepartureBoard) {
+    for flights in departureBoard.departingFlights {
+        
+        print("Departing Flights: \(flights.departureTime!), \(flights.terminal ?? "No terminal assigned"), \(flights.flightStatus)")
+    }
+    
+}
+printDepartures2(departureBoard: departureBoard)
 //: ## 5. Add an instance method to your `DepatureBoard` class (above) that can send an alert message to all passengers about their upcoming flight. Loop through the flights and use a `switch` on the flight status variable.
 //: a. If the flight is canceled print out: "We're sorry your flight to \(city) was canceled, here is a $500 voucher"
 //:
@@ -75,7 +144,7 @@ import UIKit
 //: d. Call the `alertPassengers()` function on your `DepartureBoard` object below
 //:
 //: f. Stretch: Display a custom message if the `terminal` is `nil`, tell the traveler to see the nearest information desk for more details.
-
+departureBoard.alertPassengers()
 
 
 
