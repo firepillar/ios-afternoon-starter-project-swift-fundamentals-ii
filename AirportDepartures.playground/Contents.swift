@@ -55,6 +55,8 @@ class DepartureBoard {
                     print("We're sorry your flight to \(flight.destination) was canceled, here is a $500 voucher")
                 case FlightStatus.Delayed :
                     print("We're sorry our flight to \(flight.destination) has been delayed. Please see a gate agent for more details.")
+                case FlightStatus.Scheduled :
+                    print("Your flight to \(flight.destination) is scheduled to depart from terminal \(flight.terminal ?? "TBD").")
                 default:
                     break
             
@@ -166,5 +168,19 @@ departureBoard.alertPassengers()
 //:
 //: f. Stretch: Use a [`NumberFormatter`](https://developer.apple.com/documentation/foundation/numberformatter) with the `currencyStyle` to format the amount in US dollars.
 
+func calculateAirfare(checkedBags: Int, distance: Int, travelers: Int) -> Double {
+    let bag = 25
+    let baggagePrice = bag * checkedBags
+    let mile = 0.10
+    let milagePrice = mile * Double(distance)
+    let totalAirfare = milagePrice + Double(baggagePrice) * Double(travelers)
+    
+        print("The total price for your flight(s) will be $\(totalAirfare)")
+        return totalAirfare
+    
+    
+}
 
-
+calculateAirfare(checkedBags: 5, distance: 1400, travelers: 2)
+calculateAirfare(checkedBags: 2, distance: 3600, travelers: 5)
+calculateAirfare(checkedBags: 3, distance: 400, travelers: 1)
